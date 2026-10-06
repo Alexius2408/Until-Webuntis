@@ -1,0 +1,13 @@
+# Packed extension builds
+*.zip
+*.xpi
+*.crx
+*.pem
+web-ext-artifacts/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

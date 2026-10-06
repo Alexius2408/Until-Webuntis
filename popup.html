@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="3.5 4.1 17 17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <g class="mark__bell">
+            <path d="M7.5 15.75h9M8.6 15.75v-4.15a3.4 3.4 0 0 1 6.8 0v4.15M12 6.4v1.9" />
+            <circle class="mark__clapper" cx="12" cy="18.2" r="1.5" fill="currentColor" stroke="none" />
+          </g>
+          <path class="mark__wave mark__wave--left" d="M5.25 8.6a4.9 4.9 0 0 0-.75 3" />
+          <path class="mark__wave mark__wave--right" d="M18.75 8.6a4.9 4.9 0 0 1 .75 3" />
+        </svg>
+      </span>
+      <div>
+        <h1 data-i18n="extName">Until</h1>
+      </div>
+    </header>
+
+    <main>
+      <section class="group" aria-label="Emoji" data-i18n-label="emojiSection">
+        <div class="list">
+          <label class="row" id="emoji-label">
+            <span class="row__text">
+              <span class="row__name" data-i18n="lessonEmoji">Lesson emoji</span>
+              <span class="row__desc" data-i18n="lessonEmojiDesc">Click to choose, or paste one</span>
+            </span>
+            <input
+              type="text"
+              id="emoji-input"
+              class="emoji-input"
+              placeholder="🪑"
+              autocomplete="off"
+              spellcheck="false"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              aria-controls="emoji-picker"
+            />
+          </label>
+        </div>
+
+        <!-- Filled by ui.js -->
+        <div class="picker" id="emoji-picker" role="dialog" aria-label="Choose an emoji" data-i18n-label="pickerLabel" inert>
+          <div class="picker__grid"></div>
+          <div class="picker__foot">
+            <span data-i18n="pickerFoot">Or paste any emoji</span>
+            <span class="picker__shortcut"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="remind-title">
+        <h2 class="group__title" id="remind-title" data-i18n="remindTitle">Remind me with</h2>
+        <div class="list">
+          <label class="row">
+            <span class="row__text">
+              <span class="row__name" data-i18n="notification">Notification</span>
+              <span class="row__desc" data-i18n="notificationDesc">Show a system notification</span>
+            </span>
+            <input type="checkbox" role="switch" id="notification" class="switch-input" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <label class="row">
+            <span class="row__text">
+              <span class="row__name" data-i18n="alert">Alert</span>
+              <span class="row__desc" data-i18n="alertDesc">Alert on the WebUntis page</span>
+            </span>
+            <input type="checkbox" role="switch" id="alert" class="switch-input" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <label class="row row--number">
+            <span class="row__text">
+              <span class="row__name" data-i18n="remindMinutes">Remind me minutes before lesson ends</span>
+            </span>
+            <input type="number" id="remindMinutes" class="number-input" min="0" max="60" value="5" />
+          </label>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="show-title">
+        <h2 class="group__title" id="show-title">
+          <span data-i18n="showBefore">Show</span>
+          <span class="emoji-mirror" data-emoji-mirror>🪑</span>
+          <span data-i18n="showAfter">in WebUntis</span>
+        </h2>
+        <div class="list">
+          <label class="row">
+            <span class="row__text">
+              <span class="row__name" data-i18n="onLessons">On lessons</span>
+              <span class="row__desc" data-i18n="onLessonsDesc">Marks the lesson in your timetable</span>
+            </span>
+            <input type="checkbox" role="switch" id="lesson" class="switch-input" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <label class="row">
+            <span class="row__text">
+              <span class="row__name" data-i18n="sidebar">In the sidebar</span>
+              <span class="row__desc" data-i18n="sidebarDesc">Show the emoji in the side panel</span>
+            </span>
+            <input type="checkbox" role="switch" id="taskbar" class="switch-input" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <label class="row row--number">
+            <span class="row__text">
+              <span class="row__name" data-i18n="highlightMinutes">Highlight emoji minutes before end</span>
+            </span>
+            <input type="number" id="showMinutes" class="number-input" min="0" max="100" value="48" />
+          </label>
+        </div>
+      </section>
+    </main>
+    <script src="variables.js"></script>
+    <script src="script.js"></script>
+    <script src="ui.js"></script>
+  </body>
+</html>

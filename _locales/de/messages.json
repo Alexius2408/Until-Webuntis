@@ -1,0 +1,25 @@
+{
+  "extName": { "message": "Until" },
+  "extDescription": { "message": "Zeigt, nach welchen WebUntis-Stunden die Sessel hochgestellt werden müssen, und erinnert dich rechtzeitig." },
+
+  "emojiSection": { "message": "Emoji" },
+  "lessonEmoji": { "message": "Stunden Emoji" },
+  "lessonEmojiDesc": { "message": "Klicken zum Auswählen oder füge eines ein" },
+  "pickerLabel": { "message": "Emoji auswählen" },
+  "pickerFoot": { "message": "Oder füge ein Emoji ein" },
+
+  "remindTitle": { "message": "Erinnere mich mit" },
+  "notification": { "message": "Benachrichtigung" },
+  "notificationDesc": { "message": "Systemweite Benachrichtigung anzeigen" },
+  "alert": { "message": "Meldung" },
+  "alertDesc": { "message": "Meldung auf der WebUntis-Seite" },
+  "remindMinutes": { "message": "Minuten vor Stundenende erinnern" },
+
+  "showBefore": { "message": "" },
+  "showAfter": { "message": "in WebUntis anzeigen" },
+  "onLessons": { "message": "Bei Stunden" },
+  "onLessonsDesc": { "message": "Markiert die Stunde in deinem Stundenplan" },
+  "sidebar": { "message": "In der Seitenleiste" },
+  "sidebarDesc": { "message": "Emoji in der Seitenleiste anzeigen" },
+  "highlightMinutes": { "message": "Emoji Minuten vor Stundenende hervorheben" }
+}

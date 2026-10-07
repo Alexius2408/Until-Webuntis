@@ -1,6 +1,6 @@
 # Setting up Until for your school
 
-Every school is a bit different. Maybe your students don't put chairs up, maybe they have to switch off the lights, or maybe you want the default reminder earlier. You can change all of that in **one file: [`variables.js`](variables.js)**. You don't need to know JavaScript or any programming skills for that. Just a bit time.
+Every school is a bit different. Maybe your students don't put chairs up, maybe they have to switch off the lights, or maybe you want the default reminder earlier. You can change all of that in **one file: [`variables.js`](src/variables.js)**. You don't need to know JavaScript or any programming skills for that. Just a bit time.
 
 ## Before you start
 
@@ -184,7 +184,7 @@ If you translate Until into a new language, please send it to me so everyone can
 Some things are deeper in the code or in other files:
 
 - **Popup texts**: in `_locales/<language>/messages.json`.
-- **The icon**: the files in `icons/`.
+- **The icon**: the files in `src/icons/`.
 - **The WebUntis address**: Until runs on every `*.webuntis.com` page. If your school uses WebUntis on a different domain, change both `"matches"` lines in `manifest.json`.
 
 ## Sharing your version

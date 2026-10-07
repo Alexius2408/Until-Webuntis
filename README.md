@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="icons/icon.svg" width="96" alt="Until logo" />
+<img src="src/icons/icon.svg" width="96" alt="Until logo" />
 
 # Until
 
@@ -46,12 +46,12 @@ Until comes in **English** and **German**. It shows the correct one depending on
 **Want Until in your language?** Send me a translation and I'll add it! The texts are in two places:
 
 1. **The popup:** copy the `_locales/en` folder and rename it to your language code, for example `_locales/fr` for French or `_locales/es` for Spanish. In its `messages.json`, translate only the `"message"` values. Leave the keys (like `"lessonEmoji"`) as they are.
-2. **The alert and notification:** in [`variables.js`](variables.js), copy the `en: { ... }` block under `texts`, rename it to your language code and translate it. Leave the `{placeholders}` as they are.
+2. **The alert and notification:** in [`variables.js`](src/variables.js), copy the `en: { ... }` block under `texts`, rename it to your language code and translate it. Leave the `{placeholders}` as they are.
 3. Open a [pull request](../../pulls) or an [issue](../../issues) with your files.
 
 ## Using Until at your school
 
-Need different texts, emojis or default settings for your school? They're all in [`variables.js`](variables.js). How to edit it is in [SCHOOL_SETUP.md](SCHOOL_SETUP.md).
+Need different texts, emojis or default settings for your school? They're all in [`variables.js`](src/variables.js). How to edit it is in [SCHOOL_SETUP.md](SCHOOL_SETUP.md).
 
 ## Screenshots
 

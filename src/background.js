@@ -5,7 +5,7 @@ ext.runtime.onMessage.addListener((message) => {
 
   ext.notifications.create({
     type: "basic",
-    iconUrl: ext.runtime.getURL("icons/icon-128.png"),
+    iconUrl: ext.runtime.getURL("src/icons/icon-128.png"),
     title: message.title,
     message: message.text
   });

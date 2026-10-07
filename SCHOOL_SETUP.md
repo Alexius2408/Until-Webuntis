@@ -2,6 +2,20 @@
 
 Every school is a bit different. Maybe your students don't put chairs up, maybe they have to switch off the lights, or maybe you want the default reminder earlier. You can change all of that in **one file: [`variables.js`](src/variables.js)**. You don't need to know JavaScript or any programming skills for that. Just a bit time.
 
+## Contents
+
+- [Before you start](#before-you-start)
+- [What you can change](#what-you-can-change)
+  - [The emoji](#the-emoji)
+  - [Default settings](#default-settings)
+  - [The alert and notification texts](#the-alert-and-notification-texts)
+    - [Placeholders](#placeholders)
+    - [Example: a short alert](#example-a-short-alert)
+    - [Example: a longer alert with a checklist](#example-a-longer-alert-with-a-checklist)
+  - [Languages](#languages)
+- [What isn't in variables.js](#what-isnt-in-variablesjs)
+- [Sharing your version](#sharing-your-version)
+
 ## Before you start
 
 1. [Download this repository](../../archive/refs/heads/main.zip) and unzip it.
@@ -175,7 +189,7 @@ texts: {
 - **`fallbackLanguage`** is used when there is no block for the browser's language.
 - If a language block is missing one of the three texts, Until takes that text from the fallback language.
 
-The texts in the **popup** (like "Remind me with" or "On lessons") aren't in `variables.js` but in [`_locales/`](_locales/), one folder per language. For a full translation you need both. How to do that is in the [README](README.md#languages).
+The texts in the **popup** (like "Remind me with" or "On lessons") aren't in `variables.js` but in [`_locales/`](src/_locales/), one folder per language. For a full translation you need both. How to do that is in the [README](README.md#languages).
 
 If you translate Until into a new language, please send it to me so everyone can use it!
 
@@ -184,7 +198,7 @@ If you translate Until into a new language, please send it to me so everyone can
 Some things are deeper in the code or in other files:
 
 - **Popup texts**: in `_locales/<language>/messages.json`.
-- **The icon**: the files in `src/icons/`.
+- **The icon**: the files in `icons/`.
 - **The WebUntis address**: Until runs on every `*.webuntis.com` page. If your school uses WebUntis on a different domain, change both `"matches"` lines in `manifest.json`.
 
 ## Sharing your version

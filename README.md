@@ -18,14 +18,14 @@ A browser extension for WebUntis that marks the lessons where nobody uses the ro
 
 At my school, the last class in a room has to put the chairs up before leaving for the day. But to know if you're the last one, you have to open your timetable, find the room, open the room's timetable and check if another class comes after you. Nobody wants to do that every day.
 
-So it often happens, that the cleaning staff needs to put the chairs up instead.
+So it often happens that the cleaning staff needs to put the chairs up instead.
 
 That's why a teacher asked me if I wanted to build an extension that does the checking for us.
 
 ## How it works
 
-1. **It looks at your timetable.** For every day, Until takes your last lesson.
-2. **It checks the room.** It looks at that room's timetable to see if another class comes in after you.
+1. **It looks at your timetable.** Until goes through every lesson you have this week.
+2. **It checks each room.** It looks at that room's timetable to see if another class comes in after you.
 3. **It marks the lesson.** If nobody comes after you, the lesson gets an emoji in your WebUntis timetable.
 4. **It reminds you.** A few minutes before the lesson ends, you get a notification.
 

@@ -23,9 +23,7 @@ ext.storage.local.get(DEFAULT_TIMES).then((data) => {
 // Every school's WebUntis lives at <server>.webuntis.com/WebUntis/...
 const untis = ky.create({ baseUrl: "/WebUntis/" });
 
-// Runs fn only once and shares the result, also with calls that come in while
-// it's still loading. Forgets it on errors (so the next call tries again) and
-// after maxAge milliseconds.
+// Runs fn once and shares the result, forgets it on errors and after maxAge ms
 function cached(fn, maxAge = Infinity) {
   let promise = null;
   let expires = 0;
@@ -42,8 +40,7 @@ function cached(fn, maxAge = Infinity) {
 }
 
 // ---------- School name ----------
-// JSON-RPC needs the school name. WebUntis keeps it in a cookie
-// JavaScript can't read, so try the places where it usually shows up.
+// JSON RPC needs the school name, so try the places where it usually shows up
 const SCHOOL_KEY = `school:${location.host}`;
 let school = null;
 
@@ -51,9 +48,7 @@ let school = null;
 const schoolInUrl = new URLSearchParams(location.search).get("school");
 if (schoolInUrl) ext.storage.local.set({ [SCHOOL_KEY]: schoolInUrl });
 
-// The time of the last change in WebUntis. Also finds the school name on the
-// way: the call fails with a wrong one.
-// null if no name works: no caching, just always fetch fresh
+// The time of the last change in WebUntis, also finds the school name. null if no name works
 async function getLatestImportTime() {
   const saved = (await ext.storage.local.get(SCHOOL_KEY))[SCHOOL_KEY];
   const candidates = [
@@ -90,7 +85,7 @@ async function rpcWithSchool(schoolName, method, params = {}) {
 }
 
 // ---------- Login ----------
-// The REST API needs a token. One is valid for 15 minutes (tested), so reuse it for 14.
+// The REST API needs a token. One is valid for 15 minutes, so reuse it for 14.
 const getToken = cached(
   async () => {
     // ky's .text() would send "Accept: text/*" and WebUntis answers that with a 500
@@ -126,7 +121,7 @@ const getUser = cached(async () => {
   };
 });
 
-// ---------- Timetables WebUntis loads itself ----------
+// ---------- Timetables WebUntis loads itself ---------
 // inject.js passes on every timetable the page loads, so there's no need to fetch our own again
 const pageTimetables = new Map();
 const waiting = new Map(); // same key, value is resolve() of waitForPageTimetable
@@ -136,7 +131,8 @@ function timetableKey(resourceType, resourceId, week) {
 }
 
 window.addEventListener("message", (event) => {
-  if (event.source !== window || event.data?.source !== "until-webuntis") return;
+  if (event.source !== window || event.data?.source !== "until-webuntis")
+    return;
   const params = new URL(event.data.url, location.href).searchParams;
   const key = timetableKey(
     params.get("resourceType"),
@@ -148,9 +144,7 @@ window.addEventListener("message", (event) => {
   waiting.delete(key);
 });
 
-// WebUntis loads the timetable at the same time as we start, so wait for its answer.
-// Its lesson cards can't be on the screen before that anyway.
-// null if it doesn't come in time, then we fetch it ourselves.
+// Waits for the timetable WebUntis loads itself, null if it doesn't come in time
 function waitForPageTimetable(key, ms) {
   if (pageTimetables.has(key)) return Promise.resolve(pageTimetables.get(key));
   return new Promise((resolve) => {
@@ -232,8 +226,7 @@ function showEmojis() {
 }
 
 // ---------- Main ----------
-// WebUntis is a single-page app: the URL changes without a page reload,
-// so check the URL regularly and react when it changes.
+// WebUntis changes the URL without reloading the page, so check it regularly
 let lastPage = null;
 let running = false;
 
@@ -260,33 +253,30 @@ async function showReminder() {
   const today = Number(
     new Date().toLocaleDateString("sv-SE").replaceAll("-", ""),
   );
-  const todaysLesson = lessons.find((l) => l.date === today);
-
-  if (!todaysLesson) return;
-
   const now = new Date();
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const toMinutes = (t) => Math.floor(t / 100) * 60 + (t % 100);
 
-  const end = Number(todaysLesson["end"]);
-  const endMinutes = Math.floor(end / 100) * 60 + (end % 100);
+  const todaysLesson = lessons.find(
+    (l) => l.date === today && isReminderTime(toMinutes(l.end), nowMinutes),
+  );
+  if (!todaysLesson) return;
 
-  if (settings["alert"]) showAlert(todaysLesson, endMinutes, nowMinutes);
-  if (settings["notification"])
-    showNotification(todaysLesson, endMinutes, nowMinutes);
+  if (settings["alert"]) showAlert(todaysLesson);
+  if (settings["notification"]) showNotification(todaysLesson);
 }
 
 // From remindMinutes before the end until the end itself, so 0 means "when it ends"
 function isReminderTime(endMinutes, nowMinutes) {
   return (
-    nowMinutes >= endMinutes - times["remindMinutes"] && nowMinutes <= endMinutes
+    nowMinutes >= endMinutes - times["remindMinutes"] &&
+    nowMinutes <= endMinutes
   );
 }
 
 let alertFor = null;
 
-function showAlert(todaysLesson, endMinutes, nowMinutes) {
-  if (!isReminderTime(endMinutes, nowMinutes)) return;
-  if (!todaysLesson) return;
+function showAlert(todaysLesson) {
   if (alertFor === todaysLesson.id) return;
   alertFor = todaysLesson.id;
   alert(fillText(getText("alert"), getPlaceholders(todaysLesson)));
@@ -294,8 +284,7 @@ function showAlert(todaysLesson, endMinutes, nowMinutes) {
 
 let notifiedFor = null;
 
-function showNotification(todaysLesson, endMinutes, nowMinutes) {
-  if (!isReminderTime(endMinutes, nowMinutes)) return;
+function showNotification(todaysLesson) {
   if (notifiedFor === todaysLesson.id) return;
   notifiedFor = todaysLesson.id;
 
@@ -311,10 +300,9 @@ function showNotification(todaysLesson, endMinutes, nowMinutes) {
 // ---------- Texts ----------
 // The texts themselves are in variables.js
 
-// One text in the browser's language. If variables.js has no block for that
-// language, or the block is missing this text, the fallback language is used.
+// One text in the browser's language, or in the fallback language if it's missing
 function getText(name) {
-  const language = ext.i18n.getUILanguage().split("-")[0]; // "de-AT" -> "de"
+  const language = ext.i18n.getUILanguage().split("-")[0]; // "de-AT" becomes "de"
   return (
     VARIABLES.texts[language]?.[name] ??
     VARIABLES.texts[VARIABLES.fallbackLanguage][name]
@@ -343,11 +331,13 @@ function getPlaceholders(lesson) {
   };
 }
 
-// Puts the values into the {placeholders}. A text is one string or a list of lines.
-// Unknown placeholders stay as they are, so a typo shows up in the alert.
+// Puts the values into the {placeholders}, unknown ones stay as they are
 function fillText(text, values) {
   const joined = Array.isArray(text) ? text.join("\n") : text;
-  return joined.replace(/\{(\w+)\}/g, (placeholder, name) => values[name] ?? placeholder);
+  return joined.replace(
+    /\{(\w+)\}/g,
+    (placeholder, name) => values[name] ?? placeholder,
+  );
 }
 
 // True if the lesson is today and ends within the next showMinutes minutes (0 = never)
@@ -375,8 +365,7 @@ async function showEmojiSidebar() {
   const wrapper = document.querySelector(".untis-menu-header--main .wrapper");
   if (settings["taskbar"]) {
     if (wrapper) {
-      // Use this week's lessons, not the week you're looking at,
-      // so the glow also works while browsing other weeks
+      // This week's lessons, so the glow also works while browsing other weeks
       let lessons = [];
       try {
         lessons = await getThisWeeksChairLessons();
@@ -400,7 +389,9 @@ async function showEmojiSidebar() {
       wrapper.style.position = "relative";
       sidebarEmoji.style.cssText =
         "position:absolute; right:10px; top:15px; transform:none; line-height:1; font-size:1.5rem; font-weight:bold; z-index:9999;";
-      sidebarEmoji.style.textShadow = glow ? `0 0 10px ${VARIABLES.glowColor}` : "";
+      sidebarEmoji.style.textShadow = glow
+        ? `0 0 10px ${VARIABLES.glowColor}`
+        : "";
       if (sidebarEmoji.textContent !== emoji) sidebarEmoji.textContent = emoji;
     }
   } else {
@@ -441,10 +432,10 @@ async function update(week) {
   const key = `chairs:${location.host}:${userId}:${week.start}`;
   const saved = (await ext.storage.local.get(key))[key];
 
-  // show the last result right away...
+  // Show the saved result right away
   if (saved) setMarked(saved.lessons);
 
-  // ...and only work it out again if something changed in WebUntis
+  // Only work it out again if something changed in WebUntis
   const importTime = await getLatestImportTime();
   if (saved && importTime && saved.importTime === importTime) return;
 
@@ -462,46 +453,44 @@ const getThisWeeksChairLessons = cached(
   5 * 60 * 1000,
 );
 
-// The last lesson of each day, if nobody else uses its room after us
+// Every lesson where nobody else uses its room after us on that day
 async function getChairLessons(week, userId, userType) {
   const resourceType = RESOURCE_TYPES[userType];
-  const lastLessonLastRoom = [];
 
-  // WebUntis loads your timetable too, so use its answer (from inject.js),
-  // or fetch it ourselves if it doesn't come
+  // WebUntis loads your timetable too, so use its answer, or fetch it
   const myDays =
     (await waitForPageTimetable(
       timetableKey(resourceType, userId, week),
       3000,
     )) ?? (await getTimetable(resourceType, userId, week, "MY_TIMETABLE"));
   const roomIds = await getRoomIds(week);
-  const lastLessons = getLastLesson(toLessons(myDays, roomIds));
+  const myLessons = toLessons(myDays, roomIds);
 
-  // all rooms at the same time instead of one after the other (that was the slow part)
+  // each room only once, even if we have several lessons in it
+  const usedRooms = [
+    ...new Set(myLessons.map((l) => l.roomId).filter(Boolean)),
+  ];
+  const roomLessons = {};
   await Promise.all(
-    lastLessons.map(async (lesson) => {
-      if (!lesson.roomId) {
-        console.warn("No room found for lesson", lesson);
-        return;
-      }
-      const roomDays = await getTimetable(
-        "ROOM",
-        lesson.roomId,
-        week,
-        "STANDARD",
+    usedRooms.map(async (roomId) => {
+      roomLessons[roomId] = toLessons(
+        await getTimetable("ROOM", roomId, week, "STANDARD"),
       );
-
-      // the room's timetable is the whole week, we only need the day of our lesson
-      const sameDay = toLessons(roomDays).filter((l) => l.date === lesson.date);
-      const [lastInRoom] = getLastLesson(sameDay);
-      // nobody uses the room after us, so we're the last ones in it
-      if (lastInRoom?.end === lesson.end) {
-        lastLessonLastRoom.push(lesson);
-      }
     }),
   );
 
-  return lastLessonLastRoom;
+  return myLessons.filter((lesson) => {
+    if (!lesson.roomId) {
+      console.warn("No room found for lesson", lesson);
+      return false;
+    }
+    const sameDay = roomLessons[lesson.roomId].filter(
+      (l) => l.date === lesson.date,
+    );
+    const [lastInRoom] = getLastLesson(sameDay);
+    // nobody uses the room after us, so we're the last ones in it
+    return lastInRoom?.end === lesson.end;
+  });
 }
 
 // ---------- Timetable ----------
@@ -519,12 +508,7 @@ function getWeek(date) {
   };
 }
 
-// The whole week as a simple list, sorted by day and time:
-// Cancelled lessons are left out. A replacement lesson is its own entry at the
-// same time (status "ADDITIONAL"), so it automatically takes their place.
-// Double lessons come as one entry, `id` is the ID of its last period.
-// Without roomIds (a room's own timetable) roomId stays empty, it isn't needed there.
-// room, subject, teacher and class are for the texts in variables.js.
+// The week as a sorted list without cancelled lessons, `id` is the last period of a double lesson
 function toLessons(days, roomIds = {}) {
   return days
     .flatMap((day) => day.gridEntries)
@@ -543,14 +527,10 @@ function toLessons(days, roomIds = {}) {
     .sort((a, b) => a.date - b.date || a.end - b.end);
 }
 
-// The short name of the lesson's room, subject, teacher or class ("ROOM", "SUBJECT", ...).
-// It isn't always in the same position (the slots depend on the view), so search all of them.
-// undefined if the lesson has none.
+// The short name of the lesson's room, subject, teacher or class, undefined if it has none
 function getName(lesson, type) {
   for (let i = 1; i <= 7; i++) {
-    const entry = lesson[`position${i}`]?.find(
-      (p) => p.current?.type === type,
-    );
+    const entry = lesson[`position${i}`]?.find((p) => p.current?.type === type);
     if (entry) return entry.current.shortName;
   }
 }
@@ -564,8 +544,7 @@ function getLastLesson(lessons) {
   return Object.values(lastByDay); // number keys are already sorted by date
 }
 
-// The REST API that WebUntis' own timetable page uses. (The old
-// api/public/timetable/weekly/data leaves out Mondays.) Needs the login token.
+// The REST API WebUntis' own timetable page uses (the old weekly/data API leaves out Mondays)
 async function getTimetable(resourceType, resourceId, week, timetableType) {
   // WebUntis loaded it already (e.g. you looked at that room), no request needed
   const fromPage = pageTimetables.get(

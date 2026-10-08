@@ -1,7 +1,4 @@
-// Runs inside the WebUntis page itself ("world": "MAIN" in manifest.json), because
-// only there it can see the page's own requests. Passes every timetable WebUntis
-// loads on to content.js, so the extension doesn't have to fetch it a second time.
-// WebUntis uses XMLHttpRequest, not fetch (tested).
+// Runs in the page itself to pass every timetable WebUntis loads (via XMLHttpRequest) on to content.js
 
 // Inside a function, so our variables don't end up in the page's global scope
 (() => {

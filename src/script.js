@@ -1,5 +1,4 @@
-// Firefox and Safari call the extension API "browser",
-// Chrome, Edge, Opera (GX) and Brave call it "chrome"
+// Firefox calls the extension API "browser", Chrome and Edge call it "chrome"
 const ext = globalThis.browser ?? globalThis.chrome;
 
 const textinput = document.getElementById("emoji-input");
@@ -9,12 +8,12 @@ function isEmoji(char) {
   return /\p{Extended_Pictographic}|\p{Regional_Indicator}|\u20E3/u.test(char);
 }
 
-// 1. When the popup opens: restore the saved emoji
+// When the popup opens: restore the saved emoji
 ext.storage.local.get({ emoji: "" }).then((data) => {
   textinput.value = data.emoji;
 });
 
-// 2. When it changes: filter it and save it
+// When it changes: filter it and save it
 textinput.addEventListener("input", () => {
   const emojis = [...segmenter.segment(textinput.value)]
     .map((s) => s.segment)
@@ -25,7 +24,7 @@ textinput.addEventListener("input", () => {
   ext.storage.local.set({ emoji });
 });
 
-// 3. Only when something is pasted (Ctrl+V / Cmd+V / right-click, Paste)
+// Only when something is pasted (Ctrl+V / Cmd+V / right-click, Paste)
 textinput.addEventListener("paste", async (event) => {
   event.preventDefault(); // we insert it ourselves below
 
@@ -39,7 +38,6 @@ textinput.addEventListener("paste", async (event) => {
   const pastedEmoji = pastedEmojis.at(-1); // the emoji that was pasted
 
   textinput.value = pastedEmoji;
-  // storage.get returns a Promise, so wait for it and then take the array out
   const data = await ext.storage.local.get({ Emoji_array: VARIABLES.emojiChoices });
   const emojis = data.Emoji_array;
 
@@ -102,5 +100,15 @@ numberInputs.forEach((element) => {
 
     lastValue = element.value;
     ext.storage.local.set({ [element.id]: number });
+  });
+});
+
+
+// When opening the GitHub links, the popup should close automatically. Can't use target="_blank", because then it opens a new window
+document.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", async (event) => {
+    event.preventDefault();
+    await ext.tabs.create({ url: link.href });
+    window.close();
   });
 });

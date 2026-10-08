@@ -21,5 +21,11 @@
   "onLessonsDesc": { "message": "Marks the lesson in your timetable" },
   "sidebar": { "message": "In the sidebar" },
   "sidebarDesc": { "message": "Show the emoji in the side panel" },
-  "highlightMinutes": { "message": "Highlight emoji minutes before end" }
+  "highlightMinutes": { "message": "Highlight emoji minutes before end" },
+
+  "footerBefore": { "message": "Check out my" },
+  "footerProfile": { "message": "GitHub Profile" },
+  "footerMiddle": { "message": "or the" },
+  "footerRepo": { "message": "Until Repo" },
+  "footerAfter": { "message": "" }
 }

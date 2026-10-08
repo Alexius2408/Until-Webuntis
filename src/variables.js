@@ -1,8 +1,4 @@
-// Everything a school can change to make Until its own.
-// A longer explanation with examples is in SCHOOL_SETUP.md.
-//
-// After changing something, reload the extension (chrome://extensions → the
-// reload arrow on Until, or load it again in Firefox) and reload WebUntis.
+// Everything a school can change (see SCHOOL_SETUP.md). Reload the extension and WebUntis after a change
 
 const VARIABLES = {
   // ---------- Emoji ----------
@@ -10,20 +6,17 @@ const VARIABLES = {
   // The emoji Until uses when nobody picked one in the popup yet
   defaultEmoji: "🪑",
 
-  // The emojis you can pick from in the popup (it shows 8 per row).
-  // Add, remove or reorder them however you like.
+  // The emojis you can pick from in the popup (8 per row)
   emojiChoices: [
     "🪑", "🧹", "🧽", "🧼", "🗑️", "✨", "📚", "✏️",
     "🔔", "⏰", "📌", "⚠️", "🚨", "✅", "❗",
   ],
 
-  // The color the emoji glows in while the lesson is about to end.
-  // Any CSS color works: "red", "#ff0000", "rgb(255, 0, 0)", ...
+  // The glow color when the lesson is about to end, any CSS color works
   glowColor: "rgb(255, 0, 0)",
 
   // ---------- Default settings ----------
-  // What the popup is set to before a student changes anything.
-  // Once a student changes a setting, their own choice is kept.
+  // The popup's starting values, a student's own changes are kept
 
   // The switches in the popup. true = on, false = off
   switches: {
@@ -33,8 +26,7 @@ const VARIABLES = {
     taskbar: true, // emoji in the WebUntis sidebar
   },
 
-  // The number fields in the popup: the starting value and the lowest
-  // and highest number a student can type in
+  // The number fields in the popup: starting value, lowest and highest number
   minutes: {
     // Remind me ... minutes before the lesson ends
     remindMinutes: { default: 5, min: 0, max: 60 },
@@ -43,12 +35,9 @@ const VARIABLES = {
   },
 
   // ---------- Texts ----------
-  // The alert and notification texts, one block per language.
-  // Until uses the browser's language, and `fallbackLanguage` if there is no block for it.
+  // The alert and notification texts, one block per language
   //
-  // A text can be one string or a list of lines ("" is an empty line).
-  // You can put these placeholders anywhere, in any order, as often as you
-  // like, or leave them out completely. None of them are required:
+  // A text is a string or a list of lines ("" = empty line). All placeholders are optional:
   //
   //   {emoji}        the emoji the student picked
   //   {room}         the room, e.g. "404"

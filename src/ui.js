@@ -44,7 +44,6 @@ function showEmoji(emoji) {
 let buttons = [];
 
 async function drawEmoji() {
-  // storage.get returns a Promise, so wait for it and then take the array out.
   // The emojis to choose from are in variables.js
   const data = await ext.storage.local.get({ Emoji_array: VARIABLES.emojiChoices });
   const emojis = data.Emoji_array;
